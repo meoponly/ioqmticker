@@ -566,31 +566,31 @@
                                         const isAdditionalComplete = lecture.hasTest && lecture.testDone && lecture.moduleDone && lecture.revisionDone;
                                         
                                         return `
-                                            <tr class="border-b ${isLectureComplete ? 'border-green-100' : 'border-gray-100'} hover:bg-gray-50 transition-colors duration-200 ${isLectureComplete ? 'bg-green-50 opacity-50' : ''}">
+                                            <tr class="border-b ${isLectureComplete ? 'border-green-100' : 'border-gray-100'} ${isLectureComplete ? '' : 'hover:bg-gray-50'} transition-colors duration-200 ${isLectureComplete ? 'bg-green-100' : ''}">
                                                 <td class="px-4 py-2">
-                                                    <div class="text-sm font-medium ${isLectureComplete ? 'text-green-600' : 'text-gray-900'}">Lecture ${lecture.id}: ${lecture.name}</div>
+                                                    <div class="text-sm font-medium text-gray-900">Lecture ${lecture.id}: ${lecture.name}</div>
                                                 </td>
                                                 <td class="px-4 py-2 text-center">
                                                     <button onclick="toggleTask(${chapter.id}, ${lecture.id}, 'video')" class="inline-flex items-center justify-center transition-transform duration-200 hover:scale-110">
                                                         ${lecture.video ? 
-                                                            '<svg class="text-green-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>' : 
-                                                            '<svg class="text-gray-300" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>'
+                                                            '<svg class="text-green-500" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10" fill="currentColor"></circle><path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>' : 
+                                                            '<svg class="text-gray-300" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>'
                                                         }
                                                     </button>
                                                 </td>
                                                 <td class="px-4 py-2 text-center">
                                                     <button onclick="toggleTask(${chapter.id}, ${lecture.id}, 'dpp')" class="inline-flex items-center justify-center transition-transform duration-200 hover:scale-110">
                                                         ${lecture.dpp ? 
-                                                            '<svg class="text-green-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>' : 
-                                                            '<svg class="text-gray-300" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>'
+                                                            '<svg class="text-green-500" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10" fill="currentColor"></circle><path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>' : 
+                                                            '<svg class="text-gray-300" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>'
                                                         }
                                                     </button>
                                                 </td>
                                                 <td class="px-4 py-2 text-center">
                                                     <button onclick="toggleTask(${chapter.id}, ${lecture.id}, 'notes')" class="inline-flex items-center justify-center transition-transform duration-200 hover:scale-110">
                                                         ${lecture.notes ? 
-                                                            '<svg class="text-green-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>' : 
-                                                            '<svg class="text-gray-300" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>'
+                                                            '<svg class="text-green-500" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10" fill="currentColor"></circle><path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>' : 
+                                                            '<svg class="text-gray-300" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>'
                                                         }
                                                     </button>
                                                 </td>
@@ -599,32 +599,32 @@
                                                 </td>
                                             </tr>
                                             ${lecture.hasTest ? `
-                                                <tr class="border-b ${isAdditionalComplete ? 'border-green-100' : 'border-gray-100'} hover:bg-gray-50 transition-colors duration-200 ${isAdditionalComplete ? 'bg-green-50 opacity-50' : ''}">
+                                                <tr class="border-b ${isAdditionalComplete ? 'border-green-100' : 'border-gray-100'} ${isAdditionalComplete ? '' : 'hover:bg-gray-50'} transition-colors duration-200 ${isAdditionalComplete ? 'bg-green-100' : ''}">
                                                     <td class="px-4 py-2 pl-12">
-                                                        <div class="text-xs font-medium ${isAdditionalComplete ? 'text-green-600' : 'text-gray-600'} italic">└─ Additional Tasks</div>
+                                                        <div class="text-xs font-medium text-gray-600 italic">└─ Additional Tasks</div>
                                                     </td>
                                                     <td colspan="3"></td>
                                                     <td class="px-4 py-2 text-center">
                                                         <button onclick="toggleTask(${chapter.id}, ${lecture.id}, 'testDone')" class="inline-flex items-center justify-center transition-transform duration-200 hover:scale-110">
                                                             ${lecture.testDone ? 
-                                                                '<svg class="text-green-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>' : 
-                                                                '<svg class="text-gray-300" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>'
+                                                                '<svg class="text-green-500" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10" fill="currentColor"></circle><path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>' : 
+                                                                '<svg class="text-gray-300" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>'
                                                             }
                                                         </button>
                                                     </td>
                                                     <td class="px-4 py-2 text-center">
                                                         <button onclick="toggleTask(${chapter.id}, ${lecture.id}, 'moduleDone')" class="inline-flex items-center justify-center transition-transform duration-200 hover:scale-110">
                                                             ${lecture.moduleDone ? 
-                                                                '<svg class="text-green-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>' : 
-                                                                '<svg class="text-gray-300" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>'
+                                                                '<svg class="text-green-500" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10" fill="currentColor"></circle><path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>' : 
+                                                                '<svg class="text-gray-300" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>'
                                                             }
                                                         </button>
                                                     </td>
                                                     <td class="px-4 py-2 text-center">
                                                         <button onclick="toggleTask(${chapter.id}, ${lecture.id}, 'revisionDone')" class="inline-flex items-center justify-center transition-transform duration-200 hover:scale-110">
                                                             ${lecture.revisionDone ? 
-                                                                '<svg class="text-green-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>' : 
-                                                                '<svg class="text-gray-300" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>'
+                                                                '<svg class="text-green-500" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10" fill="currentColor"></circle><path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>' : 
+                                                                '<svg class="text-gray-300" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>'
                                                             }
                                                         </button>
                                                     </td>

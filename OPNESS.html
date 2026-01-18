@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOQM Study Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease-out;
+        }
+        .animate-slideUp {
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e5e5e5;
+        }
+        body.dark-mode .bg-white {
+            background-color: #2d2d2d !important;
+        }
+        body.dark-mode .text-gray-900 {
+            color: #e5e5e5 !important;
+        }
+        body.dark-mode .text-gray-600 {
+            color: #a0a0a0 !important;
+        }
+        body.dark-mode .text-gray-700 {
+            color: #b0b0b0 !important;
+        }
+        body.dark-mode .border-gray-200 {
+            border-color: #404040 !important;
+        }
+        body.dark-mode .bg-gray-50 {
+            background-color: #252525 !important;
+        }
+        body.dark-mode .bg-gray-100 {
+            background-color: #333333 !important;
+        }
+        body.dark-mode .bg-gray-200 {
+            background-color: #404040 !important;
+        }
+        body.dark-mode .hover\:bg-gray-50:hover {
+            background-color: #333333 !important;
+        }
+        body.dark-mode .hover\:bg-gray-100:hover {
+            background-color: #3d3d3d !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <div id="app" class="p-4 md:p-6">
+        <!-- Header -->
+        <div class="max-w-7xl mx-auto mb-6">
+            <div class="flex justify-between items-center">
+                <a href="https://www.pw.live/study/batches?batchChildUrl=%2Fbatches-new%2Fbatches%2Fioqm-2025-206643%2Fsubjects%2Fmathematics-976776%2Fsubject-topics%3FcontentOption%3D%26subject%3DMathematics%26batchSubjectId%3D678603472ac40557c3131c3b"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="text-4xl font-bold text-gray-900 hover:text-gray-600 transition-all duration-300 transform hover:scale-105">
+                    IOQM Pro
+                </a>
+                <div class="flex gap-3">
+                    <button onclick="showAnalytics()"
+                            class="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="20" x2="18" y2="10"></line>
+                            <line x1="12" y1="20" x2="12" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>
+                        <span class="text-sm font-semibold">Analytics</span>
+                    </button>
+                    <button onclick="toggleSettings()"
+                            class="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <span class="text-sm font-semibold">Settings</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto">
+            <!-- Compact Stats -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-3 mb-4 transition-shadow duration-300 hover:shadow-md">
+                <div class="grid grid-cols-4 gap-3 text-center">
+                    <div>
+                        <div class="text-xs text-gray-600 mb-1">Progress</div>
+                        <div id="overall-progress" class="text-xl font-bold text-gray-900">0%</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-gray-600 mb-1">Streak</div>
+                        <div id="streak-count" class="text-xl font-bold text-gray-900">0</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-gray-600 mb-1">Chapters</div>
+                        <div id="chapters-count" class="text-xl font-bold text-gray-900">0/16</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-gray-600 mb-1">Lectures</div>
+                        <div id="lectures-count" class="text-xl font-bold text-gray-900">0/0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapters Container -->
+            <div id="chapters-container"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="max-w-7xl mx-auto mt-8">
+            <div class="text-center py-4">
+                <p class="text-gray-600 text-sm">© 2025 IOQM Pro — All rights reserved.</p>
+                <p class="text-gray-600 text-sm mt-1">Developed with <span class="text-red-500">❤</span> for IOQM aspirants</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden animate-fadeIn">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full animate-slideUp">
+            <div class="flex justify-between items-center p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-bold text-gray-900">Settings</h2>
+                <button onclick="hideSettings()" class="text-gray-500 hover:text-gray-700 transition-colors">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <!-- Change Theme -->
+                <button onclick="changeTheme()" class="w-full flex items-center gap-3 p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <div class="text-left">
+                        <div class="font-semibold text-gray-900">Change Theme</div>
+                        <div class="text-sm text-gray-600">Switch between light and dark mode</div>
+                    </div>
+                </button>
+
+                <!-- Reset Data -->
+                <button onclick="confirmReset()" class="w-full flex items-center gap-3 p-4 bg-red-50 hover:bg-red-100 rounded-lg transition-colors">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-red-600">
+                        <polyline points="1 4 1 10 7 10"></polyline>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                    </svg>
+                    <div class="text-left">
+                        <div class="font-semibold text-red-600">Reset Data</div>
+                        <div class="text-sm text-gray-600">Clear all progress and start fresh</div>
+                    </div>
+                </button>
+
+                <!-- Export Data -->
+                <button onclick="exportToExcel()" class="w-full flex items-center gap-3 p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-600">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <div class="text-left">
+                        <div class="font-semibold text-green-600">Export to Excel</div>
+                        <div class="text-sm text-gray-600">Download your progress as CSV file</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Modal -->
+    <div id="analytics-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden animate-fadeIn">
+        <div class="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] overflow-hidden animate-slideUp flex flex-col">
+            <div class="flex justify-between items-center p-6 border-b border-gray-200 flex-shrink-0">
+                <h2 class="text-2xl font-bold text-gray-900">Analytics Dashboard</h2>
+                <button onclick="hideAnalytics()" class="text-gray-500 hover:text-gray-700 transition-colors">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div id="analytics-content" class="p-6 overflow-y-auto flex-1"></div>
+        </div>
+    </div>
+
+    <script>
+        const defaultChapters = [
+            {
+                id: 1, subject: "Mathematics", name: "Basic Mathematics",
+                lectures: [
+                    { id: 1, name: "Basic identities", video: false, dpp: false, notes: false },
+                    { id: 2, name: "Factorization, Simon's Favourite Factoring Technique", video: false, dpp: false, notes: false },
+                    { id: 3, name: "Doubt Class", video: false, dpp: false, notes: false },
+                    { id: 4, name: "Inequalities", video: false, dpp: false, notes: false },
+                    { id: 5, name: "Wavy curve Method", video: false, dpp: false, notes: false },
+                    { id: 6, name: "Wavy curve Method", video: false, dpp: false, notes: false },
+                    { id: 7, name: "Wavy curve Method", video: false, dpp: false, notes: false },
+                    { id: 8, name: "Doubt Class", video: false, dpp: false, notes: false },
+                    { id: 9, name: "Irrational Inequalities", video: false, dpp: false, notes: false },
+                    { id: 10, name: "Modulus Function", video: false, dpp: false, notes: false },
+                    { id: 11, name: "Doubt Class", video: false, dpp: false, notes: false },
+                    { id: 12, name: "Inequalities Involving Absolute Values", video: false, dpp: false, notes: false },
+                    { id: 13, name: "Irrational Inequalities Part - 2", video: false, dpp: false, notes: false },
+                    { id: 14, name: "Modulus Function", video: false, dpp: false, notes: false },
+                    { id: 15, name: "Inequalities Involving Absolute Values", video: false, dpp: false, notes: false },
+                    { id: 16, name: "Exponents & Power, Logarithm", video: false, dpp: false, notes: false },
+                    { id: 17, name: "Exponents & Power, Logarithm", video: false, dpp: false, notes: false },
+                    { id: 18, name: "Doubt Class", video: false, dpp: false, notes: false },
+                    { id: 19, name: "Factor & Remainder Theorem (Part -2)", video: false, dpp: false, notes: false, hasTest: true, testDone: false, moduleDone: false, revisionDone: false }
+                ]
+            },
+            {
+                id: 2, subject: "Mathematics", name: "Number Theory Part - 01",
+                lectures: [
+                    { id: 1, name: "Divisibility tests", video: false, dpp: false, notes: false },
+                    { id: 2, name: "Division algorithm", video: false, dpp: false, notes: false },
+                    { id: 3, name: "Euclidean algorithm - 01", video: false, dpp: false, notes: false },
+                    { id: 4, name: "Euclidean algorithm - 02", video: false, dpp: false, notes: false },
+                    { id: 5, name: "Extra Class of combinatorics by Rishi Joshi", video: false, dpp: false, notes: false },
+                    { id: 6, name: "Fundamental theorem of arithmetic", video: false, dpp: false, notes: false },
+                    { id: 7, name: "GCD, LCM", video: false, dpp: false, notes: false },
+                    { id: 8, name: "Prime Number", video: false, dpp: false, notes: false },
+                    { id: 9, name: "Composite numbers, Perfect squares", video: false, dpp: false, notes: false },
+                    { id: 10, name: "Doubt Class", video: false, dpp: false, notes: false },
+                    { id: 11, name: "Modulus function", video: false, dpp: false, notes: false },
+                    { id: 12, name: "Miscellaneous Problems", video: false, dpp: false, notes: false, hasTest: true, testDone: false, moduleDone: false, revisionDone: false }
+                ]
+            },
+            {
+                id: 3, subject: "Mathematics", name: "Number Theory Part - 02",
+                lectures: [
+                    { id: 1, name: "GIF, FPF", video: false, dpp: false, notes: false },
+                    { id: 2, name: "Number theoritic Functions", video: false, dpp: false, notes: false },
+                    { id: 3, name: "Number theoritic Functions", video: false, dpp: false, notes: false },
+                    { id: 4, name: "Miscellaneous Questions", video: false, dpp: false, notes: false, hasTest: true, testDone: false, moduleDone: false, revisionDone: false }
+                ]
+            },
+            {
+                id: 4, subject: "Mathematics", name: "Number Theory Part - 03",
+                lectures: [
+                    { id: 1, name: "Base system, Congruences", video: false, dpp: false, notes: false },
+                    { id: 2, name: "Fermat theorem, Wilson theorem", video: false, dpp: false, notes: false },
+                    { id: 3, name: "Euler Theorem", video: false, dpp: false, notes: false },
+                    { id: 4, name: "Chinese remainder theorem", video: false, dpp: false, notes: false },
+                    { id: 5, name: "Unit digit and last two digits", video: false, dpp: false, notes: false },
+                    { id: 6, name: "Diophantine equation - 01", video: false, dpp: false, notes: false },
+                    { id: 7, name: "Diophantine equation - 02", video: false, dpp: false, notes: false, hasTest: true, testDone: false, moduleDone: false, revisionDone: false }
+                ]
+            },
+            {
+                id: 5, subject: "Mathematics", name: "Algebra (Polynomial & Quadratic Equation)",
+                lectures: [
+                    { id: 1, name: "Polynomials and its Types, Quadratic Polynomial with Real Coefficients", video: false, dpp: false, notes: false },
+                    { id: 2, name: "Equation v/s Identity, Relation between Roots and Coefficients, Vieta's Relations", video: false, dpp: false, notes: false },
+                    { id: 3, name: "Symmetric Function of the Roots, Nature of Roots", video: false, dpp: false, notes: false },
+                    { id: 4, name: "Transformation of Equation", video: false, dpp: false, notes: false },
+                    { id: 5, name: "Rational root theorem, integer root theorem", video: false, dpp: false, notes: false },
+                    { id: 6, name: "Irreducibility of polynomials, Einstein's irreducibility Criteria", video: false, dpp: false, notes: false },
+                    { id: 7, name: "Common Roots", video: false, dpp: false, notes: false },
+                    { id: 8, name: "Theory of Equations, Graph & Sign of Real Quadratic Expression", video: false, dpp: false, notes: false },
+                    { id: 9, name: "Graph & Sign of Real Quadratic Expression", video: false, dpp: false, notes: false },
+                    { id: 10, name: "Range of Quadratic Expression, Newton's Theorem", video: false, dpp: false, notes: false, hasTest: true, testDone: false, moduleDone: false, revisionDone: false }
+                ]
+            },
+            {
+                id: 6, subject: "Mathematics", name: "Algebra (Sequence & Series)",
+                lectures: [
+                    { id: 1, name: "Introduction to sequence & series, nth term of AP, Sum of AP", video: false, dpp: false, notes: false },
+                    { id: 2, name: "Properties of A.P", video: false, dpp: false, notes: false },
+                    { id: 3, name: "Practice Session", video: false, dpp: false, notes: false },
+                    { id: 4, name: "Introduction to GP, nth term of GP + Sum of terms of GP", video: false, dpp: false, notes: false },
+                    { id: 5, name: "Properties of G.P, GM", video: false, dpp: false, notes: false },
+                    { id: 6, name: "Practice Session", video: false, dpp: false, notes: false },
+                    { id: 7, name: "Harmonic Progression, Harmonic Mean", video: false, dpp: false, notes: false },
+                    { id: 8, name: "A.G.P", video: false, dpp: false, notes: false },
+                    { id: 9, name: "Relation Between A.M, G.M & H.M", video: false, dpp: false, notes: false, hasTest: true, testDone: false, moduleDone: false, revisionDone: false }
+                ]
+            },
+            {
+                id: 7, subject: "Mathematics", name: "Recurrence Relation",
+                lectures: [
+                    { id: 1, name: "Recurrence Relation", video: false, dpp: false, notes: false },
+                    { id: 2, name: "Recurrence Relation", video: false, dpp: false, notes: false },
+                    { id: 3, name: "Recurrence Relation", video: false, dpp: false, notes: false, hasTest: true, testDone: false, moduleDone: false, revisionDone: false }
+                ]
+            },
+            {
+                id: 8, subject: "Mathematics", name: "Inequalities",
+                lectures: [
+                    { id: 1, name: "Basics of Inequalities", video: false, dpp: false, notes: false },
+                    { id: 2, name: "A.M. G.M. Inequalities", video: false, dpp: false, notes: false },
+                    { id: 3, name: "Geometrical Inequality & Mean inequality", video: false, dpp: false, notes: false },
+                    { id: 4, name: "Cauchy schwarz inequality", video: false, dpp: false, notes: false },
+                    { id: 5, name: "Titu lemma", video: false, dpp: false, notes: false },
+                    { id: 6, name: "Jensen's Inequality", video: false, dpp: false, notes: false },
+                    { id: 7, name: "Jensen's Inequality", video: false, dpp: false, notes: false, hasTest: true, testDone: false, moduleDone: false, revisionDone: false }
+                ]
+            },
+            {
+                id: 9, subject: "Mathematics", name: "Geometry (Triangles)",
+                lectures: [
+                    { id: 1, name: "Trigonometry Introduction, Compound angles and multiple/submultiple angle formulae", video: false, dpp: false, notes: false },
+                    { id: 2, name: "Basic Definitions, Angle Chasing - 1", video: false, dpp: false, notes: false },
+                    { id: 3, name: "Angle Chasing - 2", video: false, dpp: false, notes: false },
+                    { id: 4, name: "Triangles (Congruence and similarity)", video: false, dpp: false, notes: false },
+                    { id: 5, name: "Area Lemma", video: false, dpp: false, notes: false },
+                    { id: 6, name: "Important theorems - 1 (Triangle Inequality) Doubt Class", video: false, dpp: false, notes: false },
+                    { id: 7, name: "Important theorems - 2 (Stewarts Theorem, Menelaus Theorem, Ceva's Theorem)", video: false, dpp: false, notes: false, hasTest: true, testDone: false, moduleDone: false, revisionDone: false }
+                ]
+            },
+            {
+                id: 10, subject: "Mathematics", name: "Geometry (Quadrilaterals & Circles)",
+                lectures: [
+                    { id: 1, name: "Quadrilaterals", video: false, dpp: false, notes: false },
+                    { id: 2, name: "Circles - 1", video: false, dpp: false, notes: false },
+                    { id: 3, name: "Circles - 2", video: false, dpp: false, notes: false },
+                    { id: 4, name: "Circles, Centres and the Triangle", video: false, dpp: false, notes: false },
+                    { id: 5, name: "Concurrency & colinearity", video: false, dpp: false, notes: false },
+                    { id: 6, name: "Applications of trigonometry in geometry", video: false, dpp: false, notes: false, hasTest: true, testDone: false, moduleDone: false, revisionDone: false }
+                ]
+            },
+            {
+                id: 11, subject: "Mathematics", name: "Geometry (Coordinate Geometry)",
+                lectures: [
+                    { id: 1, name: "Basics Coordinate Geometry", video: false, dpp: false, notes: false },
+                    { id: 2, name: "Basics Coordinate Geometry", video: false, dpp: false, notes: false },
+                    { id: 3, name: "Important Concept", video: false, dpp: false, notes: false, hasTest: true, testDone: false, moduleDone: false, revisionDone: false }
+                ]
+            },
+            {
+                id: 12, subject: "Mathematics", name: "Binomial Theorem",
+                lectures: [
+                    { id: 1, name: "Basics of Binomial Theorem", video: false, dpp: false, notes: false },
+                    { id: 2, name: "Expansion / Middle term", video: false, dpp: false, notes: false },
+                    { id: 3, name: "Properties of Binomial Coefficient", video: false, dpp: false, notes: false },
+                    { id: 4, name: "Properties of Binomial Coefficient", video: false, dpp: false, notes: false, hasTest: true, testDone: false, moduleDone: false, revisionDone: false }
+                ]
+            },
+            {
+                id: 13, subject: "Mathematics", name: "Combinatorics Part - 01",
+                lectures: [
+                    { id: 1, name: "Introduction", video: false, dpp: false, notes: false },
+                    { id: 2, name: "Arrangement based problems", video: false, dpp: false, notes: false },
+                    { id: 3, name: "Selection based problems (use of ncr)", video: false, dpp: false, notes: false },
+                    { id: 4, name: "Gap method and block method", video: false, dpp: false, notes: false },
+                    { id: 5, name: "Arrangement problems when some items are alike, Rank of a word", video: false, dpp: false, notes: false },
+                    { id: 6, name: "Circular Permutation", video: false, dpp: false, notes: false },
+                    { id: 7, name: "Restricted Combination & Selection from identical objects", video: false, dpp: false, notes: false },
+                    { id: 8, name: "Sum & No. of divisors, Division & distribution into groups", video: false, dpp: false, notes: false },
+                    { id: 9, name: "Sum & No. of divisors, Division & distribution into groups", video: false, dpp: false, notes: false },
+                    { id: 10, name: "Miscellaneous Problems", video: false, dpp: false, notes: false, hasTest: true, testDone: false, moduleDone: false, revisionDone: false }
+                ]
+            },
+            {
+                id: 14, subject: "Mathematics", name: "Combinatorics Part - 02",
+                lectures: [
+                    { id: 1, name: "Principle of inclusion & exclusion", video: false, dpp: false, notes: false },
+                    { id: 2, name: "Dearrangement Theorem, Multinomial Theorem", video: false, dpp: false, notes: false },
+                    { id: 3, name: "Beggar's Method", video: false, dpp: false, notes: false },
+                    { id: 4, name: "Combinatorial Geometry", video: false, dpp: false, notes: false },
+                    { id: 5, name: "Bijection principle, Exponent of prime no in n!, Coloring Problem", video: false, dpp: false, notes: false },
+                    { id: 6, name: "Application of Recurrence Relation, Tile problems, PHP", video: false, dpp: false, notes: false },
+                    { id: 7, name: "Problems on recurrence relation and PHP", video: false, dpp: false, notes: false },
+                    { id: 8, name: "Miscellaneous Problems", video: false, dpp: false, notes: false, hasTest: true, testDone: false, moduleDone: false, revisionDone: false }
+                ]
+            },
+            {
+                id: 15, subject: "Mathematics", name: "Probability",
+                lectures: [
+                    { id: 1, name: "Classic definition of probability / Important concept", video: false, dpp: false, notes: false, hasTest: true, testDone: false, moduleDone: false, revisionDone: false }
+                ]
+            },
+            {
+                id: 16, subject: "Mathematics", name: "Algebra Part - 05 (Functions)",
+                lectures: [
+                    { id: 1, name: "Introduction to functions", video: false, dpp: false, notes: false },
+                    { id: 2, name: "Range domain / Periodic function", video: false, dpp: false, notes: false, hasTest: true, testDone: false, moduleDone: false, revisionDone: false }
+                ]
+            }
+        ];
+
+        let chapters = [];
+        let streak = 0;
+        let lastStudyDate = null;
+        const examDate = '2026-09-01';
+
+        function loadData() {
+            const saved = localStorage.getItem('ioqmProgress');
+            if (saved) {
+                const data = JSON.parse(saved);
+                chapters = defaultChapters.map(defaultChapter => {
+                    const savedChapter = data.chapters?.find(ch => ch.id === defaultChapter.id);
+                    if (savedChapter) {
+                        return {
+                            ...defaultChapter,
+                            lectures: defaultChapter.lectures.map(defaultLec => {
+                                const savedLec = savedChapter.lectures?.find(l => l.id === defaultLec.id);
+                                return savedLec ? { ...defaultLec, ...savedLec } : defaultLec;
+                            })
+                        };
+                    }
+                    return defaultChapter;
+                });
+                streak = data.streak || 0;
+                lastStudyDate = data.lastStudyDate || null;
+            } else {
+                chapters = JSON.parse(JSON.stringify(defaultChapters));
+            }
+        }
+
+        function saveData() {
+            const data = {
+                chapters: chapters,
+                streak: streak,
+                lastStudyDate: new Date().toDateString(),
+                examDate: examDate
+            };
+            localStorage.setItem('ioqmProgress', JSON.stringify(data));
+        }
+
+        function updateStreak() {
+            const today = new Date().toDateString();
+            if (lastStudyDate !== today) {
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                streak = lastStudyDate === yesterday.toDateString() ? streak + 1 : 1;
+                lastStudyDate = today;
+            }
+        }
+
+        function toggleTask(chapterId, lectureId, taskType) {
+            const chapter = chapters.find(c => c.id === chapterId);
+            const lecture = chapter.lectures.find(l => l.id === lectureId);
+            lecture[taskType] = !lecture[taskType];
+            updateStreak();
+            saveData();
+            render();
+        }
+
+        function getChapterProgress(chapter) {
+            let totalTasks = 0;
+            let completedTasks = 0;
+            chapter.lectures.forEach(lecture => {
+                // Each lecture has 3 basic tasks
+                totalTasks += 3;
+                if (lecture.video) completedTasks++;
+                if (lecture.dpp) completedTasks++;
+                if (lecture.notes) completedTasks++;
+                
+                // If lecture has test, add 3 more tasks
+                if (lecture.hasTest) {
+                    totalTasks += 3;
+                    if (lecture.testDone) completedTasks++;
+                    if (lecture.moduleDone) completedTasks++;
+                    if (lecture.revisionDone) completedTasks++;
+                }
+            });
+            return totalTasks > 0 ? ((completedTasks / totalTasks) * 100).toFixed(2) : 0;
+        }
+
+        function getCompletedLectures(chapter) {
+            return chapter.lectures.filter(lec => {
+                const basicComplete = lec.video && lec.dpp && lec.notes;
+                const testComplete = lec.hasTest ? (lec.testDone && lec.moduleDone && lec.revisionDone) : true;
+                return basicComplete && testComplete;
+            }).length;
+        }
+
+        function calculateProgress() {
+            let totalTasks = 0;
+            let completedTasks = 0;
+            chapters.forEach(chapter => {
+                chapter.lectures.forEach(lecture => {
+                    // Each lecture has 3 basic tasks
+                    totalTasks += 3;
+                    if (lecture.video) completedTasks++;
+                    if (lecture.dpp) completedTasks++;
+                    if (lecture.notes) completedTasks++;
+                    
+                    // If lecture has test, add 3 more tasks
+                    if (lecture.hasTest) {
+                        totalTasks += 3;
+                        if (lecture.testDone) completedTasks++;
+                        if (lecture.moduleDone) completedTasks++;
+                        if (lecture.revisionDone) completedTasks++;
+                    }
+                });
+            });
+            return totalTasks > 0 ? ((completedTasks / totalTasks) * 100).toFixed(2) : 0;
+        }
+
+        function getDaysRemaining() {
+            const today = new Date();
+            const exam = new Date(examDate);
+            const diff = exam - today;
+            return Math.ceil(diff / (1000 * 60 * 60 * 24));
+        }
+
+        function render() {
+            const progress = calculateProgress();
+            const completedChapters = chapters.filter(chapter => 
+                chapter.lectures.every(lec => {
+                    const basicComplete = lec.video && lec.dpp && lec.notes;
+                    const testComplete = lec.hasTest ? (lec.testDone && lec.moduleDone && lec.revisionDone) : true;
+                    return basicComplete && testComplete;
+                })
+            ).length;
+            
+            const totalLectures = chapters.reduce((sum, ch) => sum + ch.lectures.length, 0);
+            const completedLectures = chapters.reduce((sum, ch) => sum + getCompletedLectures(ch), 0);
+
+            document.getElementById('overall-progress').textContent = progress + '%';
+            document.getElementById('streak-count').textContent = streak;
+            document.getElementById('chapters-count').textContent = `${completedChapters}/${chapters.length}`;
+            document.getElementById('lectures-count').textContent = `${completedLectures}/${totalLectures}`;
+
+            const container = document.getElementById('chapters-container');
+            container.innerHTML = chapters.map(chapter => {
+                const chapterProgress = getChapterProgress(chapter);
+                const lecturesDone = getCompletedLectures(chapter);
+                
+                return `
+                    <div class="mb-4 rounded-lg shadow-sm overflow-hidden border border-gray-200 bg-white transition-all duration-300 hover:shadow-lg">
+                        <div class="bg-gray-900 text-white p-3">
+                            <div>
+                                <h2 class="text-lg font-bold">${chapter.subject} - ${chapter.name}</h2>
+                                <p class="text-sm text-gray-300">${lecturesDone}/${chapter.lectures.length} Lectures • ${chapterProgress}% Complete</p>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-100 border-b border-gray-200">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Lecture</th>
+                                        <th class="px-4 py-2 text-center text-sm font-semibold text-gray-700">Video</th>
+                                        <th class="px-4 py-2 text-center text-sm font-semibold text-gray-700">DPP</th>
+                                        <th class="px-4 py-2 text-center text-sm font-semibold text-gray-700">Notes</th>
+                                        <th class="px-4 py-2 text-center text-sm font-semibold text-gray-700">Test</th>
+                                        <th class="px-4 py-2 text-center text-sm font-semibold text-gray-700">Module</th>
+                                        <th class="px-4 py-2 text-center text-sm font-semibold text-gray-700">Revision</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${chapter.lectures.map(lecture => {
+                                        const isLectureComplete = lecture.video && lecture.dpp && lecture.notes;
+                                        const isAdditionalComplete = lecture.hasTest && lecture.testDone && lecture.moduleDone && lecture.revisionDone;
+                                        
+                                        return `
+                                            <tr class="border-b ${isLectureComplete ? 'border-green-100' : 'border-gray-100'} hover:bg-gray-50 transition-colors duration-200 ${isLectureComplete ? 'bg-green-50 opacity-50' : ''}">
+                                                <td class="px-4 py-2">
+                                                    <div class="text-sm font-medium ${isLectureComplete ? 'text-green-600' : 'text-gray-900'}">Lecture ${lecture.id}: ${lecture.name}</div>
+                                                </td>
+                                                <td class="px-4 py-2 text-center">
+                                                    <button onclick="toggleTask(${chapter.id}, ${lecture.id}, 'video')" class="inline-flex items-center justify-center transition-transform duration-200 hover:scale-110">
+                                                        ${lecture.video ? 
+                                                            '<svg class="text-green-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>' : 
+                                                            '<svg class="text-gray-300" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>'
+                                                        }
+                                                    </button>
+                                                </td>
+                                                <td class="px-4 py-2 text-center">
+                                                    <button onclick="toggleTask(${chapter.id}, ${lecture.id}, 'dpp')" class="inline-flex items-center justify-center transition-transform duration-200 hover:scale-110">
+                                                        ${lecture.dpp ? 
+                                                            '<svg class="text-green-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>' : 
+                                                            '<svg class="text-gray-300" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>'
+                                                        }
+                                                    </button>
+                                                </td>
+                                                <td class="px-4 py-2 text-center">
+                                                    <button onclick="toggleTask(${chapter.id}, ${lecture.id}, 'notes')" class="inline-flex items-center justify-center transition-transform duration-200 hover:scale-110">
+                                                        ${lecture.notes ? 
+                                                            '<svg class="text-green-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>' : 
+                                                            '<svg class="text-gray-300" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>'
+                                                        }
+                                                    </button>
+                                                </td>
+                                                <td class="px-4 py-2 text-center" colspan="3">
+                                                    ${!lecture.hasTest ? '<span class="text-gray-300">-</span>' : ''}
+                                                </td>
+                                            </tr>
+                                            ${lecture.hasTest ? `
+                                                <tr class="border-b ${isAdditionalComplete ? 'border-green-100' : 'border-gray-100'} hover:bg-gray-50 transition-colors duration-200 ${isAdditionalComplete ? 'bg-green-50 opacity-50' : ''}">
+                                                    <td class="px-4 py-2 pl-12">
+                                                        <div class="text-xs font-medium ${isAdditionalComplete ? 'text-green-600' : 'text-gray-600'} italic">└─ Additional Tasks</div>
+                                                    </td>
+                                                    <td colspan="3"></td>
+                                                    <td class="px-4 py-2 text-center">
+                                                        <button onclick="toggleTask(${chapter.id}, ${lecture.id}, 'testDone')" class="inline-flex items-center justify-center transition-transform duration-200 hover:scale-110">
+                                                            ${lecture.testDone ? 
+                                                                '<svg class="text-green-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>' : 
+                                                                '<svg class="text-gray-300" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>'
+                                                            }
+                                                        </button>
+                                                    </td>
+                                                    <td class="px-4 py-2 text-center">
+                                                        <button onclick="toggleTask(${chapter.id}, ${lecture.id}, 'moduleDone')" class="inline-flex items-center justify-center transition-transform duration-200 hover:scale-110">
+                                                            ${lecture.moduleDone ? 
+                                                                '<svg class="text-green-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>' : 
+                                                                '<svg class="text-gray-300" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>'
+                                                            }
+                                                        </button>
+                                                    </td>
+                                                    <td class="px-4 py-2 text-center">
+                                                        <button onclick="toggleTask(${chapter.id}, ${lecture.id}, 'revisionDone')" class="inline-flex items-center justify-center transition-transform duration-200 hover:scale-110">
+                                                            ${lecture.revisionDone ? 
+                                                                '<svg class="text-green-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>' : 
+                                                                '<svg class="text-gray-300" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>'
+                                                            }
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ` : ''}
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showAnalytics() {
+            const progress = calculateProgress();
+            const daysRemaining = getDaysRemaining();
+            const completedChapters = chapters.filter(chapter => 
+                chapter.lectures.every(lec => {
+                    const basicComplete = lec.video && lec.dpp && lec.notes;
+                    const testComplete = lec.hasTest ? (lec.testDone && lec.moduleDone && lec.revisionDone) : true;
+                    return basicComplete && testComplete;
+                })
+            ).length;
+            const totalLectures = chapters.reduce((sum, ch) => sum + ch.lectures.length, 0);
+            const completedLectures = chapters.reduce((sum, ch) => sum + getCompletedLectures(ch), 0);
+
+            const content = `
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <div class="text-sm text-gray-600 mb-1">Overall Progress</div>
+                        <div class="text-3xl font-bold text-gray-900">${progress}%</div>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <div class="text-sm text-gray-600 mb-1">Days to Exam</div>
+                        <div class="text-3xl font-bold text-gray-900">${daysRemaining}</div>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <div class="text-sm text-gray-600 mb-1">Current Streak</div>
+                        <div class="text-3xl font-bold text-gray-900">${streak}</div>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <div class="text-sm text-gray-600 mb-1">Chapters Done</div>
+                        <div class="text-3xl font-bold text-gray-900">${completedChapters}/${chapters.length}</div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Progress Overview</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Overall Progress Pie Chart -->
+                        <div class="flex flex-col items-center">
+                            <svg width="200" height="200" viewBox="0 0 200 200">
+                                <circle cx="100" cy="100" r="80" fill="none" stroke="#e5e7eb" stroke-width="30" />
+                                <circle cx="100" cy="100" r="80" fill="none" stroke="#111827" stroke-width="30" 
+                                        stroke-dasharray="${(progress / 100) * 502.4} 502.4" 
+                                        transform="rotate(-90 100 100)" style="transition: all 1s" />
+                                <text x="100" y="100" text-anchor="middle" dy=".3em" class="text-3xl font-bold fill-gray-900">${progress}%</text>
+                            </svg>
+                            <p class="text-center text-gray-600 mt-2 font-semibold">Overall Progress</p>
+                            <p class="text-center text-gray-500 text-sm">${completedLectures}/${totalLectures} lectures done</p>
+                        </div>
+
+                        <!-- Chapter Completion Pie Chart -->
+                        <div class="flex flex-col items-center">
+                            ${(() => {
+                                const radius = 80;
+                                const circumference = 2 * Math.PI * radius;
+                                let currentAngle = -90;
+                                const colors = [
+                                    '#93C5FD', '#BFDBFE', '#DBEAFE', '#FCA5A5', '#FECACA', 
+                                    '#FED7AA', '#FDE68A', '#FEF08A', '#D9F99D', '#BBF7D0',
+                                    '#A7F3D0', '#99F6E4', '#A5F3FC', '#BAE6FD', '#C7D2FE', '#DDD6FE'
+                                ];
+                                
+                                const totalTasksAllChapters = chapters.reduce((sum, ch) => {
+                                    let chapterTotal = 0;
+                                    ch.lectures.forEach(lec => {
+                                        chapterTotal += 3;
+                                        if (lec.hasTest) chapterTotal += 3;
+                                    });
+                                    return sum + chapterTotal;
+                                }, 0);
+                                
+                                const paths = chapters.map((chapter, index) => {
+                                    let chapterCompleted = 0;
+                                    chapter.lectures.forEach(lec => {
+                                        if (lec.video) chapterCompleted++;
+                                        if (lec.dpp) chapterCompleted++;
+                                        if (lec.notes) chapterCompleted++;
+                                        if (lec.hasTest) {
+                                            if (lec.testDone) chapterCompleted++;
+                                            if (lec.moduleDone) chapterCompleted++;
+                                            if (lec.revisionDone) chapterCompleted++;
+                                        }
+                                    });
+                                    
+                                    const percentage = (chapterCompleted / totalTasksAllChapters) * 100;
+                                    const angle = (percentage / 100) * 360;
+                                    const startAngle = currentAngle;
+                                    currentAngle += angle;
+                                    
+                                    const startRad = (startAngle * Math.PI) / 180;
+                                    const endRad = (currentAngle * Math.PI) / 180;
+                                    
+                                    const x1 = 100 + radius * Math.cos(startRad);
+                                    const y1 = 100 + radius * Math.sin(startRad);
+                                    const x2 = 100 + radius * Math.cos(endRad);
+                                    const y2 = 100 + radius * Math.sin(endRad);
+                                    
+                                    const largeArc = angle > 180 ? 1 : 0;
+                                    
+                                    if (percentage < 0.1) return '';
+                                    
+                                    return `
+                                        <path d="M 100 100 L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z" 
+                                              fill="${colors[index % colors.length]}" 
+                                              stroke="white" 
+                                              stroke-width="2"/>
+                                    `;
+                                }).join('');
+                                
+                                return `
+                                    <svg width="200" height="200" viewBox="0 0 200 200">
+                                        ${paths}
+                                        <circle cx="100" cy="100" r="50" fill="white"/>
+                                        <text x="100" y="95" text-anchor="middle" class="text-sm font-bold fill-gray-900">Chapter</text>
+                                        <text x="100" y="110" text-anchor="middle" class="text-sm font-bold fill-gray-900">Progress</text>
+                                    </svg>
+                                `;
+                            })()}
+                            <p class="text-center text-gray-600 mt-2 font-semibold">Chapter Distribution</p>
+                            <p class="text-center text-gray-500 text-sm">Contribution to total</p>
+                        </div>
+
+                        <!-- Chapter Progress Bars -->
+                        <div class="flex flex-col items-center">
+                            <div class="space-y-3 w-full">
+                                ${chapters.slice(0, 6).map((chapter, index) => {
+                                    const chapterProgress = getChapterProgress(chapter);
+                                    const colors = ['#93C5FD', '#BFDBFE', '#DBEAFE', '#FCA5A5', '#FECACA', '#FED7AA'];
+                                    return `
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-4 h-4 rounded-full flex-shrink-0" style="background-color: ${colors[index % colors.length]}"></div>
+                                            <div class="flex-1">
+                                                <div class="flex justify-between mb-1">
+                                                    <span class="text-xs font-medium text-gray-700">${chapter.name.substring(0, 20)}...</span>
+                                                    <span class="text-xs font-bold text-gray-900">${chapterProgress}%</span>
+                                                </div>
+                                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                                    <div class="h-2 rounded-full transition-all duration-500" 
+                                                         style="width: ${chapterProgress}%; background-color: ${colors[index % colors.length]}"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                            <p class="text-center text-gray-600 mt-4 font-semibold">Top Chapters</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Chapter-wise Breakdown</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        ${chapters.map((chapter, index) => {
+                            const chapterProgress = getChapterProgress(chapter);
+                            const lecturesDone = getCompletedLectures(chapter);
+                            const colors = [
+                                '#93C5FD', '#BFDBFE', '#DBEAFE', '#FCA5A5', '#FECACA', 
+                                '#FED7AA', '#FDE68A', '#FEF08A', '#D9F99D', '#BBF7D0',
+                                '#A7F3D0', '#99F6E4', '#A5F3FC', '#BAE6FD', '#C7D2FE', '#DDD6FE'
+                            ];
+                            
+                            let totalTasks = 0;
+                            let completedTasks = 0;
+                            chapter.lectures.forEach(lec => {
+                                totalTasks += 3;
+                                if (lec.video) completedTasks++;
+                                if (lec.dpp) completedTasks++;
+                                if (lec.notes) completedTasks++;
+                                if (lec.hasTest) {
+                                    totalTasks += 3;
+                                    if (lec.testDone) completedTasks++;
+                                    if (lec.moduleDone) completedTasks++;
+                                    if (lec.revisionDone) completedTasks++;
+                                }
+                            });
+                            
+                            return `
+                                <div class="border border-gray-200 rounded-lg p-3">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div class="w-3 h-3 rounded-full flex-shrink-0" style="background-color: ${colors[index % colors.length]}"></div>
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-sm text-gray-900">${chapter.name}</h4>
+                                            <p class="text-xs text-gray-600">${lecturesDone}/${chapter.lectures.length} lectures • ${completedTasks}/${totalTasks} tasks</p>
+                                        </div>
+                                        <div class="text-lg font-bold text-gray-900">${chapterProgress}%</div>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="rounded-full h-2 transition-all duration-500" 
+                                             style="width: ${chapterProgress}%; background-color: ${colors[index % colors.length]}"></div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+                
+                <div class="mt-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Study Pace</h3>
+                    <p class="text-gray-700"><span class="font-semibold">${totalLectures - completedLectures}</span> lectures remaining</p>
+                    <p class="text-gray-700">Average: <span class="font-semibold">${daysRemaining > 0 ? ((totalLectures - completedLectures) / daysRemaining).toFixed(1) : 0}</span> lectures/day needed</p>
+                </div>
+            `;
+            
+            document.getElementById('analytics-content').innerHTML = content;
+            document.getElementById('analytics-modal').classList.remove('hidden');
+        }
+
+        function hideAnalytics() {
+            document.getElementById('analytics-modal').classList.add('hidden');
+        }
+
+        function toggleSettings() {
+            document.getElementById('settings-modal').classList.remove('hidden');
+        }
+
+        function hideSettings() {
+            document.getElementById('settings-modal').classList.add('hidden');
+        }
+
+        function changeTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+        }
+
+        function confirmReset() {
+            if (confirm('Are you sure you want to reset all your progress? This action cannot be undone!')) {
+                localStorage.removeItem('ioqmProgress');
+                chapters = JSON.parse(JSON.stringify(defaultChapters));
+                streak = 0;
+                lastStudyDate = null;
+                hideSettings();
+                render();
+            }
+        }
+
+        function exportToExcel() {
+            let csvContent = "Chapter,Lecture,Video,DPP,Notes,Test,Module,Revision\n";
+            
+            chapters.forEach(chapter => {
+                chapter.lectures.forEach(lecture => {
+                    csvContent += `"${chapter.name}","Lecture ${lecture.id}: ${lecture.name}",`;
+                    csvContent += `${lecture.video ? 'Yes' : 'No'},`;
+                    csvContent += `${lecture.dpp ? 'Yes' : 'No'},`;
+                    csvContent += `${lecture.notes ? 'Yes' : 'No'},`;
+                    csvContent += `${lecture.hasTest ? (lecture.testDone ? 'Yes' : 'No') : 'N/A'},`;
+                    csvContent += `${lecture.hasTest ? (lecture.moduleDone ? 'Yes' : 'No') : 'N/A'},`;
+                    csvContent += `${lecture.hasTest ? (lecture.revisionDone ? 'Yes' : 'No') : 'N/A'}\n`;
+                });
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ioqm_progress.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+            hideSettings();
+        }
+
+        // Initialize
+        loadData();
+        render();
+        
+        // Load dark mode preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
+</body>
+</html>
+                

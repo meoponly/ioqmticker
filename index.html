@@ -14,11 +14,133 @@
             from { transform: translateY(20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes slideInLeft {
+            from { transform: translateX(-100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideInRight {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
+        }
+        
         .animate-fadeIn {
             animation: fadeIn 0.3s ease-out;
         }
         .animate-slideUp {
             animation: slideUp 0.3s ease-out;
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        .animate-pulse-slow {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        .animate-slideInLeft {
+            animation: slideInLeft 0.6s ease-out;
+        }
+        .animate-slideInRight {
+            animation: slideInRight 0.6s ease-out;
+        }
+        .animate-glow {
+            animation: glow 2s ease-in-out infinite;
+        }
+        
+        /* Gradient background */
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e293b 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Animated background shapes */
+        .bg-shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .bg-shape-1 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+        
+        .bg-shape-2 {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(45deg, #ec4899, #f43f5e);
+            bottom: -50px;
+            right: -50px;
+            animation-delay: 1s;
+        }
+        
+        .bg-shape-3 {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(45deg, #10b981, #14b8a6);
+            top: 50%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+        
+        /* Glass morphism effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Input focus effect */
+        .fancy-input:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255, 255, 255, 0.1) !important;
+            border-color: #555555 !important;
+        }
+        
+        /* Button hover effect */
+        .fancy-button {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .fancy-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .fancy-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .fancy-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
         }
         
         /* Dark mode styles */
@@ -56,19 +178,190 @@
         body.dark-mode .hover\:bg-gray-100:hover {
             background-color: #3d3d3d !important;
         }
+        body.dark-mode #login-screen {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%) !important;
+        }
+        body.dark-mode .glass-card {
+            background: rgba(30, 30, 30, 0.95) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+        body.dark-mode input {
+            background-color: #1f1f1f !important;
+            color: #e5e5e5 !important;
+            border-color: #404040 !important;
+        }
+        body.dark-mode input::placeholder {
+            color: #888888 !important;
+        }
+        body.dark-mode .fancy-input:focus {
+            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.5) !important;
+        }
+        body.dark-mode .text-gray-700 {
+            color: #d1d5db !important;
+        }
+        body.dark-mode .text-gray-500 {
+            color: #9ca3af !important;
+        }
+        body.dark-mode .text-gray-600 {
+            color: #a0a0a0 !important;
+        }
+        body.dark-mode .bg-blue-50 {
+            background-color: rgba(59, 130, 246, 0.1) !important;
+        }
+        body.dark-mode .bg-purple-50 {
+            background-color: rgba(139, 92, 246, 0.1) !important;
+        }
+        body.dark-mode .border-gray-200 {
+            border-color: #404040 !important;
+        }
+        body.dark-mode #login-error {
+            background-color: rgba(239, 68, 68, 0.1) !important;
+            border-color: rgba(239, 68, 68, 0.3) !important;
+        }
+        body.dark-mode .bg-gradient-to-r {
+            background: linear-gradient(to right, #1e3a5f, #2d1b4e) !important;
+        }
+        body.dark-mode .border-blue-200 {
+            border-color: #3b4f6b !important;
+        }
+        body.dark-mode .text-blue-600 {
+            color: #60a5fa !important;
+        }
+        body.dark-mode .text-orange-600 {
+            color: #fb923c !important;
+        }
+        body.dark-mode .bg-green-50 {
+            background-color: rgba(34, 197, 94, 0.08) !important;
+        }
+        body.dark-mode .bg-green-50:hover {
+            background-color: rgba(34, 197, 94, 0.12) !important;
+        }
+        body.dark-mode .bg-blue-50 {
+            background-color: #1e3a5f !important;
+        }
+        body.dark-mode .bg-blue-100:hover {
+            background-color: #2d4a6f !important;
+        }
+        body.dark-mode .bg-red-50 {
+            background-color: #3d1f1f !important;
+        }
+        body.dark-mode .bg-red-100:hover {
+            background-color: #4d2f2f !important;
+        }
+        body.dark-mode .text-blue-600 {
+            color: #60a5fa !important;
+        }
+        body.dark-mode .text-red-600 {
+            color: #f87171 !important;
+        }
+        
+        /* Confetti styles */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gray-50">
-    <div id="app" class="p-4 md:p-6">
+    <!-- Login Screen -->
+    <div id="login-screen" class="fixed inset-0 flex items-center justify-center p-4 z-50" style="background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);">
+        <!-- Animated background shapes -->
+        <div class="bg-shape bg-shape-1" style="background: linear-gradient(45deg, #333333, #555555);"></div>
+        <div class="bg-shape bg-shape-2" style="background: linear-gradient(45deg, #2a2a2a, #444444);"></div>
+        <div class="bg-shape bg-shape-3" style="background: linear-gradient(45deg, #3a3a3a, #4a4a4a);"></div>
+        
+        <div class="rounded-2xl shadow-2xl max-w-md w-full p-8 animate-slideUp relative z-10" style="background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1);">
+            
+            <div class="text-center mb-8">
+                <h1 class="text-5xl font-bold mb-2 animate-float" style="background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                    IOQM Pro
+                </h1>
+                <p class="text-gray-400 animate-slideInRight">Track your IOQM preparation journey</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="relative">
+                    <label class="block text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        Enter Username
+                    </label>
+                    <input type="text" id="username-input" 
+                           placeholder="Choose a unique username" 
+                           class="fancy-input w-full px-4 py-3 border-2 rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-300"
+                           style="background-color: #0a0a0a; color: #ffffff; border-color: #333333; box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);"
+                           maxlength="20"
+                           autocomplete="off"
+                           autofocus>
+                    <p class="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        3-20 characters, letters and numbers only
+                    </p>
+                </div>
+                
+                <button onclick="loginUser()" 
+                        class="fancy-button w-full text-white py-3 rounded-xl font-semibold transition-all duration-300 transform relative z-10" style="background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);">
+                    <span class="relative z-10 flex items-center justify-center gap-2">
+                        Continue
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </span>
+                </button>
+                
+                <div id="login-error" class="hidden text-red-400 text-sm text-center font-semibold p-3 rounded-lg" style="background-color: rgba(100, 100, 100, 0.2); border: 1px solid rgba(150, 150, 150, 0.3);"></div>
+            </div>
+            
+            <!-- Feature highlights -->
+            <div class="mt-8 pt-6" style="border-top: 1px solid #333333;">
+                <div class="grid grid-cols-3 gap-4 text-center">
+                    <div class="animate-slideInLeft">
+                        <div class="text-2xl mb-1">📊</div>
+                        <div class="text-xs text-gray-400 font-medium">Track Progress</div>
+                    </div>
+                    <div class="animate-slideInLeft" style="animation-delay: 0.1s">
+                        <div class="text-2xl mb-1">🔥</div>
+                        <div class="text-xs text-gray-400 font-medium">Build Streaks</div>
+                    </div>
+                    <div class="animate-slideInLeft" style="animation-delay: 0.2s">
+                        <div class="text-2xl mb-1">🎯</div>
+                        <div class="text-xs text-gray-400 font-medium">Ace IOQM</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="app" class="p-4 md:p-6 hidden">
         <!-- Header -->
         <div class="max-w-7xl mx-auto mb-6">
             <div class="flex justify-between items-center">
-                <a href="https://www.pw.live/study/batches?batchChildUrl=%2Fbatches-new%2Fbatches%2Fioqm-2025-206643%2Fsubjects%2Fmathematics-976776%2Fsubject-topics%3FcontentOption%3D%26subject%3DMathematics%26batchSubjectId%3D678603472ac40557c3131c3b"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="text-4xl font-bold text-gray-900 hover:text-gray-600 transition-all duration-300 transform hover:scale-105">
-                    IOQM Pro
-                </a>
+                <div>
+                    <a href="https://www.pw.live/study/batches?batchChildUrl=%2Fbatches-new%2Fbatches%2Fioqm-2025-206643%2Fsubjects%2Fmathematics-976776%2Fsubject-topics%3FcontentOption%3D%26subject%3DMathematics%26batchSubjectId%3D678603472ac40557c3131c3b"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="text-4xl font-bold text-gray-900 hover:text-gray-600 transition-all duration-300 transform hover:scale-105">
+                        IOQM Pro
+                    </a>
+                    <p class="text-sm text-gray-600 mt-1">Welcome, <span id="current-username" class="font-semibold text-gray-900"></span>!</p>
+                </div>
                 <div class="flex gap-3">
                     <button onclick="showAnalytics()"
                             class="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
@@ -101,11 +394,11 @@
                     </div>
                     <div>
                         <div class="text-xs text-gray-600 mb-1">Streak</div>
-                        <div id="streak-count" class="text-xl font-bold text-gray-900">0</div>
+                        <div id="streak-count" class="text-xl font-bold text-gray-900">0 🔥</div>
                     </div>
                     <div>
                         <div class="text-xs text-gray-600 mb-1">Chapters</div>
-                        <div id="chapters-count" class="text-xl font-bold text-gray-900">0/18</div>
+                        <div id="chapters-count" class="text-xl font-bold text-gray-900">0/17</div>
                     </div>
                     <div>
                         <div class="text-xs text-gray-600 mb-1">Lectures</div>
@@ -122,7 +415,7 @@
         <div class="max-w-7xl mx-auto mt-8">
             <div class="text-center py-4">
                 <p class="text-gray-600 text-sm">© 2025 IOQM Pro – All rights reserved.</p>
-                <p class="text-gray-600 text-sm mt-1">Developed with <span class="text-red-500">❤</span> for IOQM aspirants</p>
+                <p class="text-gray-600 text-sm mt-1">Developed with <span class="text-red-500">❤</span> by Meoponly</p>
             </div>
         </div>
     </div>
@@ -159,6 +452,19 @@
                     </div>
                 </button>
 
+                <!-- Export Data -->
+                <button onclick="exportToExcel()" class="w-full flex items-center gap-3 p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-600">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <div class="text-left">
+                        <div class="font-semibold text-green-600">Export to Excel</div>
+                        <div class="text-sm text-gray-600">Download your progress as CSV file</div>
+                    </div>
+                </button>
+
                 <!-- Reset Data -->
                 <button onclick="confirmReset()" class="w-full flex items-center gap-3 p-4 bg-red-50 hover:bg-red-100 rounded-lg transition-colors">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-red-600">
@@ -171,16 +477,16 @@
                     </div>
                 </button>
 
-                <!-- Export Data -->
-                <button onclick="exportToExcel()" class="w-full flex items-center gap-3 p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-600">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="7 10 12 15 17 10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                <!-- Logout -->
+                <button onclick="logoutUser()" class="w-full flex items-center gap-3 p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue-600">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
                     </svg>
                     <div class="text-left">
-                        <div class="font-semibold text-green-600">Export to Excel</div>
-                        <div class="text-sm text-gray-600">Download your progress as CSV file</div>
+                        <div class="font-semibold text-blue-600">Logout</div>
+                        <div class="text-sm text-gray-600">Sign out from your account</div>
                     </div>
                 </button>
             </div>
@@ -204,6 +510,7 @@
     </div>
 
     <script>
+        let currentUsername = null;
         const defaultChapters = [
             {
                 id: 1, subject: "Mathematics", name: "Basic Mathematics",
@@ -404,70 +711,200 @@
         let lastStudyDate = null;
         const examDate = '2026-09-01';
 
-        function loadData() {
-            const saved = localStorage.getItem('ioqmProgress');
-            if (saved) {
-                const data = JSON.parse(saved);
-                chapters = defaultChapters.map(defaultChapter => {
-                    const savedChapter = data.chapters?.find(ch => ch.id === defaultChapter.id);
-                    if (savedChapter) {
-                        return {
-                            ...defaultChapter,
-                            lectures: defaultChapter.lectures.map(defaultLec => {
-                                const savedLec = savedChapter.lectures?.find(l => l.id === defaultLec.id);
-                                return savedLec ? { ...defaultLec, ...savedLec } : defaultLec;
-                            })
-                        };
-                    }
-                    return defaultChapter;
-                });
-                streak = data.streak || 0;
-                lastStudyDate = data.lastStudyDate || null;
-            } else {
-                chapters = JSON.parse(JSON.stringify(defaultChapters));
+        // Username validation
+        function validateUsername(username) {
+            const regex = /^[a-zA-Z0-9]{3,20}$/;
+            return regex.test(username);
+        }
+
+        // Login function
+        function loginUser() {
+            const usernameInput = document.getElementById('username-input');
+            const username = usernameInput.value.trim();
+            const errorDiv = document.getElementById('login-error');
+            
+            if (!validateUsername(username)) {
+                errorDiv.textContent = 'Username must be 3-20 characters (letters and numbers only)';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+            
+            currentUsername = username;
+            errorDiv.classList.add('hidden');
+            
+            // Hide login screen, show app
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('app').classList.remove('hidden');
+            
+            // Update username display
+            document.getElementById('current-username').textContent = username;
+            
+            // Save current username to localStorage
+            localStorage.setItem('currentUsername', username);
+            
+            // Load user data
+            loadData();
+            render();
+        }
+
+        // Logout function
+        function logoutUser() {
+            if (confirm('Are you sure you want to logout?')) {
+                currentUsername = null;
+                localStorage.removeItem('currentUsername');
+                hideSettings();
+                document.getElementById('app').classList.add('hidden');
+                document.getElementById('login-screen').classList.remove('hidden');
+                document.getElementById('username-input').value = '';
             }
         }
 
+        // Load data from localStorage
+        function loadData() {
+            if (!currentUsername) return;
+            
+            const userDataKey = `ioqm_user_${currentUsername}`;
+            const saved = localStorage.getItem(userDataKey);
+            
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    chapters = defaultChapters.map(defaultChapter => {
+                        const savedChapter = data.chapters?.find(ch => ch.id === defaultChapter.id);
+                        if (savedChapter) {
+                            return {
+                                ...defaultChapter,
+                                lectures: defaultChapter.lectures.map(defaultLec => {
+                                    const savedLec = savedChapter.lectures?.find(l => l.id === defaultLec.id);
+                                    return savedLec ? { ...defaultLec, ...savedLec } : defaultLec;
+                                })
+                            };
+                        }
+                        return defaultChapter;
+                    });
+                    streak = data.streak || 0;
+                    lastStudyDate = data.lastStudyDate || null;
+                } catch (e) {
+                    console.error('Error loading data:', e);
+                    chapters = JSON.parse(JSON.stringify(defaultChapters));
+                }
+            } else {
+                // New user - initialize with default data
+                chapters = JSON.parse(JSON.stringify(defaultChapters));
+                streak = 0;
+                lastStudyDate = null;
+            }
+        }
+
+        // Save data to localStorage
         function saveData() {
+            if (!currentUsername) return;
+            
             const data = {
                 chapters: chapters,
                 streak: streak,
-                lastStudyDate: new Date().toDateString(),
-                examDate: examDate
+                lastStudyDate: lastStudyDate,
+                examDate: examDate,
+                username: currentUsername,
+                lastUpdated: new Date().toISOString()
             };
-            localStorage.setItem('ioqmProgress', JSON.stringify(data));
+            
+            const userDataKey = `ioqm_user_${currentUsername}`;
+            localStorage.setItem(userDataKey, JSON.stringify(data));
         }
 
         function updateStreak() {
-            const today = new Date().toDateString();
-            if (lastStudyDate !== today) {
-                const yesterday = new Date();
-                yesterday.setDate(yesterday.getDate() - 1);
-                streak = lastStudyDate === yesterday.toDateString() ? streak + 1 : 1;
-                lastStudyDate = today;
+            const today = new Date();
+            const todayStr = today.toDateString();
+            
+            if (lastStudyDate !== todayStr) {
+                if (lastStudyDate) {
+                    const lastDate = new Date(lastStudyDate);
+                    const yesterday = new Date(today);
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    
+                    // Check if last study was yesterday (consecutive day)
+                    if (lastDate.toDateString() === yesterday.toDateString()) {
+                        streak = streak + 1;
+                    } else {
+                        // Streak broken, start new streak
+                        streak = 1;
+                    }
+                } else {
+                    // First time studying
+                    streak = 1;
+                }
+                lastStudyDate = todayStr;
             }
         }
 
         function toggleTask(chapterId, lectureId, taskType) {
             const chapter = chapters.find(c => c.id === chapterId);
             const lecture = chapter.lectures.find(l => l.id === lectureId);
+            
+            // Store previous state to check if lecture was just completed
+            const wasComplete = isLectureFullyComplete(lecture);
+            
             lecture[taskType] = !lecture[taskType];
-            updateStreak();
+            
+            // Only update streak if we're checking something (not unchecking)
+            if (lecture[taskType]) {
+                updateStreak();
+                
+                // Check if lecture is now complete (after toggling)
+                const isNowComplete = isLectureFullyComplete(lecture);
+                
+                // Trigger confetti only if lecture just became complete
+                if (!wasComplete && isNowComplete) {
+                    createConfetti();
+                }
+            }
+            
             saveData();
             render();
+        }
+
+        // Helper function to check if a lecture is fully complete
+        function isLectureFullyComplete(lecture) {
+            const basicComplete = lecture.video && lecture.dpp && lecture.notes;
+            const additionalComplete = lecture.hasTest ? (lecture.testDone && lecture.moduleDone && lecture.revisionDone) : true;
+            return basicComplete && additionalComplete;
+        }
+
+        // Confetti effect
+        function createConfetti() {
+            const colors = ['#10B981', '#3B82F6', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316'];
+            const confettiCount = 50;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = (Math.random() * 100) + '%';
+                    confetti.style.top = '-10px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    confetti.style.animation = `confetti-fall ${2 + Math.random()}s linear forwards`;
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        if (confetti.parentNode) {
+                            confetti.remove();
+                        }
+                    }, 4000);
+                }, i * 20);
+            }
         }
 
         function getChapterProgress(chapter) {
             let totalTasks = 0;
             let completedTasks = 0;
             chapter.lectures.forEach(lecture => {
-                // Each lecture has 3 basic tasks
                 totalTasks += 3;
                 if (lecture.video) completedTasks++;
                 if (lecture.dpp) completedTasks++;
                 if (lecture.notes) completedTasks++;
                 
-                // If lecture has test, add 3 more tasks
                 if (lecture.hasTest) {
                     totalTasks += 3;
                     if (lecture.testDone) completedTasks++;
@@ -491,13 +928,11 @@
             let completedTasks = 0;
             chapters.forEach(chapter => {
                 chapter.lectures.forEach(lecture => {
-                    // Each lecture has 3 basic tasks
                     totalTasks += 3;
                     if (lecture.video) completedTasks++;
                     if (lecture.dpp) completedTasks++;
                     if (lecture.notes) completedTasks++;
                     
-                    // If lecture has test, add 3 more tasks
                     if (lecture.hasTest) {
                         totalTasks += 3;
                         if (lecture.testDone) completedTasks++;
@@ -530,7 +965,7 @@
             const completedLectures = chapters.reduce((sum, ch) => sum + getCompletedLectures(ch), 0);
 
             document.getElementById('overall-progress').textContent = progress + '%';
-            document.getElementById('streak-count').textContent = streak;
+            document.getElementById('streak-count').textContent = streak + ' 🔥';
             document.getElementById('chapters-count').textContent = `${completedChapters}/${chapters.length}`;
             document.getElementById('lectures-count').textContent = `${completedLectures}/${totalLectures}`;
 
@@ -566,7 +1001,7 @@
                                         const isAdditionalComplete = lecture.hasTest && lecture.testDone && lecture.moduleDone && lecture.revisionDone;
                                         
                                         return `
-                                            <tr class="border-b ${isLectureComplete ? 'border-green-100' : 'border-gray-100'} ${isLectureComplete ? '' : 'hover:bg-gray-50'} transition-colors duration-200 ${isLectureComplete ? 'bg-green-100' : ''}">
+                                            <tr class="border-b border-gray-100 transition-colors duration-200 ${isLectureComplete && !lecture.hasTest ? 'bg-green-50' : 'hover:bg-gray-50'} ${isLectureComplete && isAdditionalComplete ? 'bg-green-50' : ''}">
                                                 <td class="px-4 py-2">
                                                     <div class="text-sm font-medium text-gray-900">Lecture ${lecture.id}: ${lecture.name}</div>
                                                 </td>
@@ -595,11 +1030,11 @@
                                                     </button>
                                                 </td>
                                                 <td class="px-4 py-2 text-center" colspan="3">
-                                                    ${!lecture.hasTest ? '<span class="text-gray-300">-</span>' : ''}
+                                                    ${!lecture.hasTest ? '<span class="text-gray-400 text-sm">-</span>' : ''}
                                                 </td>
                                             </tr>
                                             ${lecture.hasTest ? `
-                                                <tr class="border-b ${isAdditionalComplete ? 'border-green-100' : 'border-gray-100'} ${isAdditionalComplete ? '' : 'hover:bg-gray-50'} transition-colors duration-200 ${isAdditionalComplete ? 'bg-green-100' : ''}">
+                                                <tr class="border-b border-gray-100 transition-colors duration-200 ${isAdditionalComplete ? 'bg-green-50' : 'hover:bg-gray-50'}">
                                                     <td class="px-4 py-2 pl-12">
                                                         <div class="text-xs font-medium text-gray-600 italic">└─ Additional Tasks</div>
                                                     </td>
@@ -665,7 +1100,7 @@
                     </div>
                     <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
                         <div class="text-sm text-gray-600 mb-1">Current Streak</div>
-                        <div class="text-3xl font-bold text-gray-900">${streak}</div>
+                        <div class="text-3xl font-bold text-gray-900">${streak} 🔥</div>
                     </div>
                     <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
                         <div class="text-sm text-gray-600 mb-1">Chapters Done</div>
@@ -673,132 +1108,16 @@
                     </div>
                 </div>
                 
-                <div class="mb-6">
-                    <h3 class="text-lg font-bold text-gray-900 mb-4">Progress Overview</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Overall Progress Pie Chart -->
-                        <div class="flex flex-col items-center">
-                            <svg width="200" height="200" viewBox="0 0 200 200">
-                                <circle cx="100" cy="100" r="80" fill="none" stroke="#e5e7eb" stroke-width="30" />
-                                <circle cx="100" cy="100" r="80" fill="none" stroke="#111827" stroke-width="30" 
-                                        stroke-dasharray="${(progress / 100) * 502.4} 502.4" 
-                                        transform="rotate(-90 100 100)" style="transition: all 1s" />
-                                <text x="100" y="100" text-anchor="middle" dy=".3em" class="text-3xl font-bold fill-gray-900">${progress}%</text>
-                            </svg>
-                            <p class="text-center text-gray-600 mt-2 font-semibold">Overall Progress</p>
-                            <p class="text-center text-gray-500 text-sm">${completedLectures}/${totalLectures} lectures done</p>
-                        </div>
-
-                        <!-- Chapter Completion Pie Chart -->
-                        <div class="flex flex-col items-center">
-                            ${(() => {
-                                const radius = 80;
-                                const circumference = 2 * Math.PI * radius;
-                                let currentAngle = -90;
-                                const colors = [
-                                    '#93C5FD', '#BFDBFE', '#DBEAFE', '#FCA5A5', '#FECACA', 
-                                    '#FED7AA', '#FDE68A', '#FEF08A', '#D9F99D', '#BBF7D0',
-                                    '#A7F3D0', '#99F6E4', '#A5F3FC', '#BAE6FD', '#C7D2FE', '#DDD6FE', '#E9D5FF', '#F3E8FF'
-                                ];
-                                
-                                const totalTasksAllChapters = chapters.reduce((sum, ch) => {
-                                    let chapterTotal = 0;
-                                    ch.lectures.forEach(lec => {
-                                        chapterTotal += 3;
-                                        if (lec.hasTest) chapterTotal += 3;
-                                    });
-                                    return sum + chapterTotal;
-                                }, 0);
-                                
-                                const paths = chapters.map((chapter, index) => {
-                                    let chapterCompleted = 0;
-                                    chapter.lectures.forEach(lec => {
-                                        if (lec.video) chapterCompleted++;
-                                        if (lec.dpp) chapterCompleted++;
-                                        if (lec.notes) chapterCompleted++;
-                                        if (lec.hasTest) {
-                                            if (lec.testDone) chapterCompleted++;
-                                            if (lec.moduleDone) chapterCompleted++;
-                                            if (lec.revisionDone) chapterCompleted++;
-                                        }
-                                    });
-                                    
-                                    const percentage = (chapterCompleted / totalTasksAllChapters) * 100;
-                                    const angle = (percentage / 100) * 360;
-                                    const startAngle = currentAngle;
-                                    currentAngle += angle;
-                                    
-                                    const startRad = (startAngle * Math.PI) / 180;
-                                    const endRad = (currentAngle * Math.PI) / 180;
-                                    
-                                    const x1 = 100 + radius * Math.cos(startRad);
-                                    const y1 = 100 + radius * Math.sin(startRad);
-                                    const x2 = 100 + radius * Math.cos(endRad);
-                                    const y2 = 100 + radius * Math.sin(endRad);
-                                    
-                                    const largeArc = angle > 180 ? 1 : 0;
-                                    
-                                    if (percentage < 0.1) return '';
-                                    
-                                    return `
-                                        <path d="M 100 100 L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z" 
-                                              fill="${colors[index % colors.length]}" 
-                                              stroke="white" 
-                                              stroke-width="2"/>
-                                    `;
-                                }).join('');
-                                
-                                return `
-                                    <svg width="200" height="200" viewBox="0 0 200 200">
-                                        ${paths}
-                                        <circle cx="100" cy="100" r="50" fill="white"/>
-                                        <text x="100" y="95" text-anchor="middle" class="text-sm font-bold fill-gray-900">Chapter</text>
-                                        <text x="100" y="110" text-anchor="middle" class="text-sm font-bold fill-gray-900">Progress</text>
-                                    </svg>
-                                `;
-                            })()}
-                            <p class="text-center text-gray-600 mt-2 font-semibold">Chapter Distribution</p>
-                            <p class="text-center text-gray-500 text-sm">Contribution to total</p>
-                        </div>
-
-                        <!-- Chapter Progress Bars -->
-                        <div class="flex flex-col items-center">
-                            <div class="space-y-3 w-full">
-                                ${chapters.slice(0, 6).map((chapter, index) => {
-                                    const chapterProgress = getChapterProgress(chapter);
-                                    const colors = ['#93C5FD', '#BFDBFE', '#DBEAFE', '#FCA5A5', '#FECACA', '#FED7AA'];
-                                    return `
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-4 h-4 rounded-full flex-shrink-0" style="background-color: ${colors[index % colors.length]}"></div>
-                                            <div class="flex-1">
-                                                <div class="flex justify-between mb-1">
-                                                    <span class="text-xs font-medium text-gray-700">${chapter.name.substring(0, 20)}...</span>
-                                                    <span class="text-xs font-bold text-gray-900">${chapterProgress}%</span>
-                                                </div>
-                                                <div class="w-full bg-gray-200 rounded-full h-2">
-                                                    <div class="h-2 rounded-full transition-all duration-500" 
-                                                         style="width: ${chapterProgress}%; background-color: ${colors[index % colors.length]}"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    `;
-                                }).join('')}
-                            </div>
-                            <p class="text-center text-gray-600 mt-4 font-semibold">Top Chapters</p>
-                        </div>
-                    </div>
-                </div>
-                
                 <div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-4">Chapter-wise Breakdown</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Chapter-wise Progress</h3>
+                    <div class="space-y-3">
                         ${chapters.map((chapter, index) => {
                             const chapterProgress = getChapterProgress(chapter);
                             const lecturesDone = getCompletedLectures(chapter);
                             const colors = [
-                                '#93C5FD', '#BFDBFE', '#DBEAFE', '#FCA5A5', '#FECACA', 
-                                '#FED7AA', '#FDE68A', '#FEF08A', '#D9F99D', '#BBF7D0',
-                                '#A7F3D0', '#99F6E4', '#A5F3FC', '#BAE6FD', '#C7D2FE', '#DDD6FE', '#E9D5FF', '#F3E8FF'
+                                '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', 
+                                '#EC4899', '#14B8A6', '#F97316', '#6366F1', '#84CC16',
+                                '#06B6D4', '#A855F7', '#F43F5E', '#22C55E', '#FACC15', '#EAB308', '#D946EF'
                             ];
                             
                             let totalTasks = 0;
@@ -817,17 +1136,17 @@
                             });
                             
                             return `
-                                <div class="border border-gray-200 rounded-lg p-3">
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <div class="w-3 h-3 rounded-full flex-shrink-0" style="background-color: ${colors[index % colors.length]}"></div>
+                                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <div class="w-4 h-4 rounded-full flex-shrink-0" style="background-color: ${colors[index % colors.length]}"></div>
                                         <div class="flex-1">
                                             <h4 class="font-semibold text-sm text-gray-900">${chapter.name}</h4>
                                             <p class="text-xs text-gray-600">${lecturesDone}/${chapter.lectures.length} lectures • ${completedTasks}/${totalTasks} tasks</p>
                                         </div>
-                                        <div class="text-lg font-bold text-gray-900">${chapterProgress}%</div>
+                                        <div class="text-xl font-bold text-gray-900">${chapterProgress}%</div>
                                     </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="rounded-full h-2 transition-all duration-500" 
+                                    <div class="w-full bg-gray-200 rounded-full h-3">
+                                        <div class="rounded-full h-3 transition-all duration-500" 
                                              style="width: ${chapterProgress}%; background-color: ${colors[index % colors.length]}"></div>
                                     </div>
                                 </div>
@@ -836,10 +1155,14 @@
                     </div>
                 </div>
                 
-                <div class="mt-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
-                    <h3 class="text-lg font-bold text-gray-900 mb-2">Study Pace</h3>
-                    <p class="text-gray-700"><span class="font-semibold">${totalLectures - completedLectures}</span> lectures remaining</p>
-                    <p class="text-gray-700">Average: <span class="font-semibold">${daysRemaining > 0 ? ((totalLectures - completedLectures) / daysRemaining).toFixed(1) : 0}</span> lectures/day needed</p>
+                <div class="mt-6 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200">
+                    <h3 class="text-lg font-bold text-gray-900 mb-3">📊 Study Insights</h3>
+                    <div class="space-y-2">
+                        <p class="text-gray-700"><span class="font-semibold text-blue-600">${totalLectures - completedLectures}</span> lectures remaining</p>
+                        <p class="text-gray-700">Recommended pace: <span class="font-semibold text-blue-600">${daysRemaining > 0 ? ((totalLectures - completedLectures) / daysRemaining).toFixed(1) : 0}</span> lectures/day</p>
+                        <p class="text-gray-700">Current streak: <span class="font-semibold text-orange-600">${streak} day${streak !== 1 ? 's' : ''} 🔥</span></p>
+                        ${lastStudyDate ? `<p class="text-xs text-gray-600 mt-2">Last study session: ${lastStudyDate}</p>` : ''}
+                    </div>
                 </div>
             `;
             
@@ -867,10 +1190,10 @@
 
         function confirmReset() {
             if (confirm('Are you sure you want to reset all your progress? This action cannot be undone!')) {
-                localStorage.removeItem('ioqmProgress');
                 chapters = JSON.parse(JSON.stringify(defaultChapters));
                 streak = 0;
                 lastStudyDate = null;
+                saveData();
                 hideSettings();
                 render();
             }
@@ -895,7 +1218,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'ioqm_progress.csv';
+            a.download = `ioqm_progress_${currentUsername}.csv`;
             a.click();
             window.URL.revokeObjectURL(url);
             
@@ -903,13 +1226,33 @@
         }
 
         // Initialize
-        loadData();
-        render();
-        
-        // Load dark mode preference
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            document.body.classList.add('dark-mode');
+        function init() {
+            // Check if user was previously logged in
+            const savedUsername = localStorage.getItem('currentUsername');
+            
+            if (savedUsername) {
+                currentUsername = savedUsername;
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('app').classList.remove('hidden');
+                document.getElementById('current-username').textContent = savedUsername;
+                loadData();
+                render();
+            }
+            
+            // Load dark mode preference
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+            }
+            
+            // Add enter key support for login
+            document.getElementById('username-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    loginUser();
+                }
+            });
         }
+        
+        init();
     </script>
 </body>
 </html>

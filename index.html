@@ -842,26 +842,151 @@
             const chapter = chapters.find(c => c.id === chapterId);
             const lecture = chapter.lectures.find(l => l.id === lectureId);
             
-            // Store previous state to check if lecture was just completed
-            const wasComplete = isLectureFullyComplete(lecture);
+            // Determine which group this task belongs to
+            const isBasicTask = ['video', 'dpp', 'notes'].includes(taskType);
+            const isAdditionalTask = ['testDone', 'moduleDone', 'revisionDone'].includes(taskType);
+            
+            // Store previous state based on task type
+            let wasGroupComplete = false;
+            if (isBasicTask) {
+                wasGroupComplete = lecture.video && lecture.dpp && lecture.notes;
+            } else if (isAdditionalTask) {
+                wasGroupComplete = lecture.testDone && lecture.moduleDone && lecture.revisionDone;
+            }
+            
+            const wasChapterComplete = chapter.lectures.every(lec => isLectureFullyComplete(lec));
             
             lecture[taskType] = !lecture[taskType];
             
-            // Only update streak if we're checking something (not unchecking)
+            // Only update streak and check confetti if we're checking something (not unchecking)
             if (lecture[taskType]) {
                 updateStreak();
+            }
+            
+            saveData();
+            render();
+            
+            // Check confetti AFTER saving and rendering
+            if (lecture[taskType]) {
+                const updatedChapter = chapters.find(c => c.id === chapterId);
+                const updatedLecture = updatedChapter.lectures.find(l => l.id === lectureId);
                 
-                // Check if lecture is now complete (after toggling)
-                const isNowComplete = isLectureFullyComplete(lecture);
+                // Check if the group is now complete
+                let isGroupNowComplete = false;
+                if (isBasicTask) {
+                    isGroupNowComplete = updatedLecture.video && updatedLecture.dpp && updatedLecture.notes;
+                } else if (isAdditionalTask) {
+                    isGroupNowComplete = updatedLecture.testDone && updatedLecture.moduleDone && updatedLecture.revisionDone;
+                }
                 
-                // Trigger confetti only if lecture just became complete
-                if (!wasComplete && isNowComplete) {
-                    createConfetti();
+                const isChapterNowComplete = updatedChapter.lectures.every(lec => isLectureFullyComplete(lec));
+                
+                // Trigger confetti only if this specific group just became complete
+                if (!wasGroupComplete && isGroupNowComplete) {
+                    if (!wasChapterComplete && isChapterNowComplete) {
+                        createConfetti(10); // 10x bigger confetti (500 pieces) for chapter completion!
+                    } else {
+                        createConfetti(1); // Normal confetti (50 pieces) for group completion
+                    }
+                }
+            }
+        }
+
+        function completeAllTasks(chapterId, lectureId) {
+            const chapter = chapters.find(c => c.id === chapterId);
+            const lecture = chapter.lectures.find(l => l.id === lectureId);
+            
+            // Store previous state to check if lecture was just completed
+            const wasComplete = isLectureFullyComplete(lecture);
+            
+            // Mark all basic tasks as complete
+            lecture.video = true;
+            lecture.dpp = true;
+            lecture.notes = true;
+            
+            // If lecture has test, mark those as complete too
+            if (lecture.hasTest) {
+                lecture.testDone = true;
+                lecture.moduleDone = true;
+                lecture.revisionDone = true;
+            }
+            
+            updateStreak();
+            
+            // Trigger confetti if lecture just became complete
+            if (!wasComplete) {
+                createConfetti();
+            }
+            
+            saveData();
+            render();
+        }
+
+        function completeBasicTasks(chapterId, lectureId) {
+            const chapter = chapters.find(c => c.id === chapterId);
+            const lecture = chapter.lectures.find(l => l.id === lectureId);
+            
+            // Store previous state
+            const wasComplete = isLectureFullyComplete(lecture);
+            const wasChapterComplete = chapter.lectures.every(lec => isLectureFullyComplete(lec));
+            
+            // Only mark basic tasks as complete (not additional tasks)
+            lecture.video = true;
+            lecture.dpp = true;
+            lecture.notes = true;
+            
+            updateStreak();
+            
+            // Check if lecture is now complete
+            const isNowComplete = isLectureFullyComplete(lecture);
+            
+            // Check if chapter is now complete
+            const isChapterNowComplete = chapter.lectures.every(lec => isLectureFullyComplete(lec));
+            
+            // Trigger confetti
+            if (!wasComplete && isNowComplete) {
+                if (!wasChapterComplete && isChapterNowComplete) {
+                    createConfetti(100); // 100x bigger confetti for chapter completion!
+                } else {
+                    createConfetti(1); // Normal confetti for lecture completion
                 }
             }
             
             saveData();
             render();
+        }
+
+        function completeAdditionalTasks(chapterId, lectureId) {
+            const chapter = chapters.find(c => c.id === chapterId);
+            const lecture = chapter.lectures.find(l => l.id === lectureId);
+            
+            // Store previous state BEFORE making changes
+            const wasAdditionalComplete = lecture.hasTest && lecture.testDone && lecture.moduleDone && lecture.revisionDone;
+            const wasChapterComplete = chapter.lectures.every(lec => isLectureFullyComplete(lec));
+            
+            // Only mark additional tasks as complete
+            if (lecture.hasTest) {
+                lecture.testDone = true;
+                lecture.moduleDone = true;
+                lecture.revisionDone = true;
+            }
+            
+            // Check completion status immediately AFTER changes (before save/render)
+            const isAdditionalNowComplete = lecture.hasTest && lecture.testDone && lecture.moduleDone && lecture.revisionDone;
+            const isChapterNowComplete = chapter.lectures.every(lec => isLectureFullyComplete(lec));
+            
+            updateStreak();
+            saveData();
+            render();
+            
+            // Trigger confetti for additional tasks completion
+            if (!wasAdditionalComplete && isAdditionalNowComplete) {
+                if (!wasChapterComplete && isChapterNowComplete) {
+                    createConfetti(10); // 10x bigger confetti (500 pieces) for chapter completion!
+                } else {
+                    createConfetti(1); // Normal confetti (50 pieces) for additional tasks completion
+                }
+            }
         }
 
         // Helper function to check if a lecture is fully complete
@@ -872,9 +997,9 @@
         }
 
         // Confetti effect
-        function createConfetti() {
+        function createConfetti(multiplier = 1) {
             const colors = ['#10B981', '#3B82F6', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316'];
-            const confettiCount = 50;
+            const confettiCount = 50 * multiplier;
             
             for (let i = 0; i < confettiCount; i++) {
                 setTimeout(() => {
@@ -892,7 +1017,7 @@
                             confetti.remove();
                         }
                     }, 4000);
-                }, i * 20);
+                }, i * (multiplier > 10 ? 5 : (multiplier > 1 ? 10 : 20)));
             }
         }
 
@@ -998,10 +1123,11 @@
                                 <tbody>
                                     ${chapter.lectures.map(lecture => {
                                         const isLectureComplete = lecture.video && lecture.dpp && lecture.notes;
-                                        const isAdditionalComplete = lecture.hasTest && lecture.testDone && lecture.moduleDone && lecture.revisionDone;
+                                        const isAdditionalComplete = lecture.hasTest ? (lecture.testDone && lecture.moduleDone && lecture.revisionDone) : false;
+                                        const isFullyComplete = isLectureComplete && (!lecture.hasTest || isAdditionalComplete);
                                         
                                         return `
-                                            <tr class="border-b border-gray-100 transition-colors duration-200 ${isLectureComplete && !lecture.hasTest ? 'bg-green-100' : 'hover:bg-gray-50'} ${isLectureComplete && isAdditionalComplete ? 'bg-green-100' : ''}">
+                                            <tr class="border-b border-gray-100 transition-colors duration-200 ${isLectureComplete ? 'bg-green-100' : 'hover:bg-gray-50'}" ondblclick="completeBasicTasks(${chapter.id}, ${lecture.id})" style="cursor: pointer;" title="Double-click to complete Video, DPP, and Notes">
                                                 <td class="px-4 py-2">
                                                     <div class="text-sm font-medium text-gray-900">Lecture ${lecture.id}: ${lecture.name}</div>
                                                 </td>
@@ -1034,7 +1160,7 @@
                                                 </td>
                                             </tr>
                                             ${lecture.hasTest ? `
-                                                <tr class="border-b border-gray-100 transition-colors duration-200 ${isAdditionalComplete ? 'bg-green-50' : 'hover:bg-gray-50'}">
+                                                <tr class="border-b border-gray-100 transition-colors duration-200 ${isAdditionalComplete ? 'bg-green-50' : 'hover:bg-gray-50'}" ondblclick="completeAdditionalTasks(${chapter.id}, ${lecture.id})" style="cursor: pointer;" title="Double-click to complete Test, Module, and Revision">
                                                     <td class="px-4 py-2 pl-12">
                                                         <div class="text-xs font-medium text-gray-600 italic">└─ Additional Tasks</div>
                                                     </td>
@@ -1108,16 +1234,130 @@
                     </div>
                 </div>
                 
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Progress Overview</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Overall Progress Pie Chart -->
+                        <div class="flex flex-col items-center">
+                            <svg width="200" height="200" viewBox="0 0 200 200">
+                                <circle cx="100" cy="100" r="80" fill="none" stroke="#e5e7eb" stroke-width="30" />
+                                <circle cx="100" cy="100" r="80" fill="none" stroke="#111827" stroke-width="30" 
+                                        stroke-dasharray="${(progress / 100) * 502.4} 502.4" 
+                                        transform="rotate(-90 100 100)" style="transition: all 1s" />
+                                <text x="100" y="100" text-anchor="middle" dy=".3em" class="text-3xl font-bold fill-gray-900">${progress}%</text>
+                            </svg>
+                            <p class="text-center text-gray-900 font-semibold mt-2">Overall Progress</p>
+                            <p class="text-center text-gray-600 text-sm">${completedLectures}/${totalLectures} lectures done</p>
+                        </div>
+
+                        <!-- Chapter Distribution Pie Chart -->
+                        <div class="flex flex-col items-center">
+                            ${(() => {
+                                const radius = 80;
+                                const circumference = 2 * Math.PI * radius;
+                                let currentAngle = -90;
+                                const colors = [
+                                    '#93C5FD', '#BFDBFE', '#DBEAFE', '#FCA5A5', '#FECACA', 
+                                    '#FED7AA', '#FDE68A', '#FEF08A', '#D9F99D', '#BBF7D0',
+                                    '#A7F3D0', '#99F6E4', '#A5F3FC', '#BAE6FD', '#C7D2FE', '#DDD6FE', '#E9D5FF'
+                                ];
+                                
+                                const totalTasksAllChapters = chapters.reduce((sum, ch) => {
+                                    let chapterTotal = 0;
+                                    ch.lectures.forEach(lec => {
+                                        chapterTotal += 3;
+                                        if (lec.hasTest) chapterTotal += 3;
+                                    });
+                                    return sum + chapterTotal;
+                                }, 0);
+                                
+                                const paths = chapters.map((chapter, index) => {
+                                    let chapterCompleted = 0;
+                                    chapter.lectures.forEach(lec => {
+                                        if (lec.video) chapterCompleted++;
+                                        if (lec.dpp) chapterCompleted++;
+                                        if (lec.notes) chapterCompleted++;
+                                        if (lec.hasTest) {
+                                            if (lec.testDone) chapterCompleted++;
+                                            if (lec.moduleDone) chapterCompleted++;
+                                            if (lec.revisionDone) chapterCompleted++;
+                                        }
+                                    });
+                                    
+                                    const percentage = (chapterCompleted / totalTasksAllChapters) * 100;
+                                    const angle = (percentage / 100) * 360;
+                                    const startAngle = currentAngle;
+                                    currentAngle += angle;
+                                    
+                                    const startRad = (startAngle * Math.PI) / 180;
+                                    const endRad = (currentAngle * Math.PI) / 180;
+                                    
+                                    const x1 = 100 + radius * Math.cos(startRad);
+                                    const y1 = 100 + radius * Math.sin(startRad);
+                                    const x2 = 100 + radius * Math.cos(endRad);
+                                    const y2 = 100 + radius * Math.sin(endRad);
+                                    
+                                    const largeArc = angle > 180 ? 1 : 0;
+                                    
+                                    if (percentage < 0.1) return '';
+                                    
+                                    return `
+                                        <path d="M 100 100 L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z" 
+                                              fill="${colors[index % colors.length]}" 
+                                              stroke="white" 
+                                              stroke-width="2"/>
+                                    `;
+                                }).join('');
+                                
+                                return `
+                                    <svg width="200" height="200" viewBox="0 0 200 200">
+                                        ${paths}
+                                        <circle cx="100" cy="100" r="50" fill="white"/>
+                                        <text x="100" y="95" text-anchor="middle" class="text-sm font-bold fill-gray-900">Chapter</text>
+                                        <text x="100" y="110" text-anchor="middle" class="text-sm font-bold fill-gray-900">Progress</text>
+                                    </svg>
+                                `;
+                            })()}
+                            <p class="text-center text-gray-900 font-semibold mt-2">Chapter Distribution</p>
+                            <p class="text-center text-gray-600 text-sm">Contribution to total</p>
+                        </div>
+
+                        <!-- Top 6 Chapters -->
+                        <div class="flex flex-col">
+                            <div class="space-y-3 flex-1">
+                                ${chapters.slice(0, 6).map((chapter, index) => {
+                                    const chapterProgress = getChapterProgress(chapter);
+                                    const colors = ['#93C5FD', '#BFDBFE', '#DBEAFE', '#FCA5A5', '#FECACA', '#FED7AA'];
+                                    return `
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-4 h-4 rounded-full flex-shrink-0" style="background-color: ${colors[index % colors.length]}"></div>
+                                            <div class="flex-1 min-w-0">
+                                                <div class="text-xs font-medium text-gray-700 truncate">${chapter.name}...</div>
+                                                <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
+                                                    <div class="h-2 rounded-full transition-all duration-500" 
+                                                         style="width: ${chapterProgress}%; background-color: ${colors[index % colors.length]}"></div>
+                                                </div>
+                                            </div>
+                                            <span class="text-sm font-bold text-gray-900 flex-shrink-0">${chapterProgress}%</span>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                            <p class="text-center text-gray-900 font-semibold mt-4">Top Chapters</p>
+                        </div>
+                    </div>
+                </div>
+                
                 <div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-4">Chapter-wise Progress</h3>
-                    <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Chapter-wise Breakdown</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         ${chapters.map((chapter, index) => {
                             const chapterProgress = getChapterProgress(chapter);
                             const lecturesDone = getCompletedLectures(chapter);
                             const colors = [
-                                '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', 
-                                '#EC4899', '#14B8A6', '#F97316', '#6366F1', '#84CC16',
-                                '#06B6D4', '#A855F7', '#F43F5E', '#22C55E', '#FACC15', '#EAB308', '#D946EF'
+                                '#93C5FD', '#BFDBFE', '#DBEAFE', '#FCA5A5', '#FECACA', 
+                                '#FED7AA', '#FDE68A', '#FEF08A', '#D9F99D', '#BBF7D0',
+                                '#A7F3D0', '#99F6E4', '#A5F3FC', '#BAE6FD', '#C7D2FE', '#DDD6FE', '#E9D5FF'
                             ];
                             
                             let totalTasks = 0;
@@ -1136,17 +1376,17 @@
                             });
                             
                             return `
-                                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                                    <div class="flex items-center gap-3 mb-2">
-                                        <div class="w-4 h-4 rounded-full flex-shrink-0" style="background-color: ${colors[index % colors.length]}"></div>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-sm text-gray-900">${chapter.name}</h4>
+                                <div class="border border-gray-200 rounded-lg p-3">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div class="w-3 h-3 rounded-full flex-shrink-0" style="background-color: ${colors[index % colors.length]}"></div>
+                                        <div class="flex-1 min-w-0">
+                                            <h4 class="font-semibold text-sm text-gray-900 truncate">${chapter.name}</h4>
                                             <p class="text-xs text-gray-600">${lecturesDone}/${chapter.lectures.length} lectures • ${completedTasks}/${totalTasks} tasks</p>
                                         </div>
-                                        <div class="text-xl font-bold text-gray-900">${chapterProgress}%</div>
+                                        <div class="text-lg font-bold text-gray-900 flex-shrink-0">${chapterProgress}%</div>
                                     </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-3">
-                                        <div class="rounded-full h-3 transition-all duration-500" 
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="rounded-full h-2 transition-all duration-500" 
                                              style="width: ${chapterProgress}%; background-color: ${colors[index % colors.length]}"></div>
                                     </div>
                                 </div>
